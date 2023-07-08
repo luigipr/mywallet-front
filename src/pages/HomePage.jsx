@@ -1,47 +1,93 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
+import { useState, useEffect, useContext } from "react"
+import CardTransaction from "../components/Transactions"
+import { Link, useNavigate } from 'react-router-dom'
+import AuthContext from "../contexts/AuthContext"
+
+
 
 export default function HomePage() {
+  const [transactions, setTransactions] = useState([])
+  const [balance, setBalance] = useState(0)
+  const { login, token} = useContext(AuthContext)
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  useEffect(() => {
+    setLoading(true)
+
+    axios.get(`${import.meta.env.VITE_API_URL}/home`, config)
+      .then(res => {
+        setTransactions(res.data)
+        setLoading(false)
+      })
+      .catch(err => {
+        alert(err.response.data)
+        navigate("/")
+      })
+
+  }, [reload])
+
+
+  useEffect(() => {
+    axios.get(`${import.meta.env.VITE_API_URL}/transactions`, config)
+      .then(res => setTransactions(res.data))
+      .catch(err => console.log(err.response.data))
+  }, [])
+
+  setTransactions(transactions.map( token = token))
+
+  balanceCalculator()
+  function balanceCalculator() {
+    const balanceArray = transactions.map((item) => {
+      if (item.tipo === "entrada") {
+        return Number((item.value).replace(",", "."))
+      } else {
+        return Number(-item.value.replace(",", "."))
+      }
+    })
+
+    balance = (balanceArray.reduce((acc, current) => acc + current, 0)).toFixed(2).toString()
+    balance.replace(".", ",")
+    return balance
+  }
+
+  
+
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, Fulano</h1>
-        <BiExit />
+        <h1 data-test="user-name">Olá, Fulano</h1>
+        <BiExit data-test="logout"/>
       </Header>
 
       <TransactionsContainer>
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
-
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
+          {transactions.map(trans => <CardTransaction key={trans._id} transaction={trans} />)}
+          
+          
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
+          <Value color={balance > 0 ? 'positivo' : 'negativo'}>{balance}</Value>
         </article>
       </TransactionsContainer>
 
 
       <ButtonsContainer>
-        <button>
+        <button data-test="new-income">
           <AiOutlinePlusCircle />
           <p>Nova <br /> entrada</p>
         </button>
-        <button>
+        <button  data-test="new-expense">
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>
@@ -50,6 +96,11 @@ export default function HomePage() {
     </HomeContainer>
   )
 }
+const Value = styled.div`
+  font-size: 16px;
+  text-align: right;
+  color: ${(props) => (props.color === "positivo" ? "green" : "red")};
+`
 
 const HomeContainer = styled.div`
   display: flex;
@@ -100,22 +151,5 @@ const ButtonsContainer = styled.section`
     p {
       font-size: 18px;
     }
-  }
-`
-const Value = styled.div`
-  font-size: 16px;
-  text-align: right;
-  color: ${(props) => (props.color === "positivo" ? "green" : "red")};
-`
-const ListItemContainer = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  color: #000000;
-  margin-right: 10px;
-  div span {
-    color: #c6c6c6;
-    margin-right: 10px;
   }
 `
