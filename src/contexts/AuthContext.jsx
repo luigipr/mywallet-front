@@ -6,7 +6,7 @@ const AuthContext = createContext();
 export function AuthProvider({ children }) {
   const persistedAuth = JSON.parse(localStorage.getItem("auth"));
   const [auth, setAuth] = useState(persistedAuth);
-
+  const [user, setUser] = useState("")
 
   function login(authData) {
     setAuth(authData);
@@ -14,7 +14,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ auth, login}}>
+    <AuthContext.Provider value={{ auth, login, user, setUser}}>
       {children}
     </AuthContext.Provider>
   )

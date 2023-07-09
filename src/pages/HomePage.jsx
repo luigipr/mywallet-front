@@ -10,8 +10,7 @@ import AuthContext from "../contexts/AuthContext"
 
 export default function HomePage() {
   const [transactions, setTransactions] = useState([])
-  const [balance, setBalance] = useState(0)
-  const { login, token} = useContext(AuthContext)
+  const { login, token, user ,setUser} = useContext(AuthContext)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const config = {
@@ -44,6 +43,9 @@ export default function HomePage() {
 
   setTransactions(transactions.map( token = token))
 
+  let userName = user.charAt(0).toUpperCase() + user.slice(1)
+  let balance
+
   balanceCalculator()
   function balanceCalculator() {
     const balanceArray = transactions.map((item) => {
@@ -59,12 +61,17 @@ export default function HomePage() {
     return balance
   }
 
-  
+  function newTransaction(tipo) {
+
+    const type = tipo;
+    navigate(`/nova-transacao/${type}`, type)
+
+  }
 
   return (
     <HomeContainer>
       <Header>
-        <h1 data-test="user-name">Olá, Fulano</h1>
+        <h1 data-test="user-name">Olá, {userName}</h1>
         <BiExit data-test="logout"/>
       </Header>
 
@@ -83,11 +90,11 @@ export default function HomePage() {
 
 
       <ButtonsContainer>
-        <button data-test="new-income">
+        <button data-test="new-income" onClick={newTransaction('entrada')}>
           <AiOutlinePlusCircle />
           <p>Nova <br /> entrada</p>
         </button>
-        <button  data-test="new-expense">
+        <button  data-test="new-expense" onClick={newTransaction('saida')}>
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>

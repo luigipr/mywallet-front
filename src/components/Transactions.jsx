@@ -3,10 +3,10 @@ import styled from "styled-components"
 
 export default function CardTransaction({transaction}) {
 
-    const {value, description, tipo, date } = transaction;
+    const {_id, value, description, tipo, date } = transaction;
 
 return (
-    <ListItemContainer>
+    <ListItemContainer key={_id}>
         <div>
             <span>{date}</span>
             <strong  data-test="registry-name">{description}</strong>

@@ -14,9 +14,11 @@ export default function SignUpPage() {
 
   function registerUser(e) {
     e.preventDefault();
-    const promise = api.signUp({username, email, password, password2});
+    const promise = axios.post
+    api.signUp({username, email, password, password2});
 
     promise.then( resposta => {
+
       alert('Você foi cadastrado com sucesso!');  
       // navegar para pagina de login
       navigate('/');

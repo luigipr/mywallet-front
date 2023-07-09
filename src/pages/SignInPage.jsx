@@ -6,10 +6,12 @@ import api from "../../services/api";
 import { useState, useEffect } from "react";
 
 
+
+
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { auth, login } = useAuth();
+  const { auth, login, user, setUser } = useAuth(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,8 +28,8 @@ export default function SignInPage() {
     const promise = api.signIn(user);
 
     promise.then( response => {
-      
-    login(response.data);
+    setUser = response.data.user.username ; 
+    login(response.data.token);
     // navegar para pagina de entrada
     navigate('/home');
     });
