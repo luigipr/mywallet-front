@@ -12,25 +12,32 @@ import {transaction} from "../services/api";
 export default function TransactionsPage(route) {
   
   const navigate = useNavigate();
-  const { login, token, user } = useAuth()
+  const { login, auth, user } = useAuth()
   const userID = user._id
   const params = useParams();
   
 
   const [value, setValue] = useState("")
   const [description, setDescription] = useState("")
-  const {type} = params.tipo
-  console.log(type)
-  type.charAt(0).toUpperCase() + user.slice(1)
+  console.log(params)
+
+  const {tipo} = params
+
+  //tipo.charAt(0).toUpperCase() + tipo.slice(1)
+
+
   const date = dayjs().format("DD/MM")
 
   function addTransaction(e) {
-    value = Number(value)
-    const currentTransaction = { userID, value, description, tipo: type, date }
+    e.preventDefault();
+    
+    setValue(Number(value))
 
-    const promise = transaction(currentTransaction, token)
-
-    promise.then(navigate('/home'));
+    const currentTransaction = { userID, value: Number(value), description, tipo, date }
+    console.log(currentTransaction)
+    const promise = transaction(currentTransaction, auth)
+    console.log(promise)
+    promise.then(() => navigate('/home'));
     promise.catch(err => {
       alert(err.response.data)})
   }
@@ -39,12 +46,12 @@ export default function TransactionsPage(route) {
   
   return (
     <TransactionsContainer>
-      <h1>Nova {type}</h1>
+      <h1>Nova {tipo}</h1>
       <form onSubmit={addTransaction}>
       <input placeholder="Valor" data-test="registry-amount-input" type="number" step="0.01" min="0.01" required 
        value={value} onChange={(e) => setValue(e.target.value)}/> 
       <input placeholder="Descrição" data-test="registry-name-input" type="text" value={description} onChange={(e) => setDescription(e.target.value)}/>
-      <button  data-test="registry-save" >Salvar TRANSAÇÃO</button>
+      <button  data-test="registry-save" >Salvar {tipo}</button>
       </form>
     </TransactionsContainer>
   )

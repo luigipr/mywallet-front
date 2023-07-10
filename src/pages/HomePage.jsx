@@ -19,7 +19,7 @@ export default function HomePage() {
 
   useEffect(() => {
 
-    setUser 
+    
     const promise = userTransactions(auth)
      promise.then(res => setTransactions(res.data))
      promise.catch(err => console.log(err.response.data))
@@ -87,11 +87,11 @@ export default function HomePage() {
 
 
       <ButtonsContainer>
-        <button data-test="new-income" onClick={newTransaction('entrada')}>
+        <button data-test="new-income" onClick={() => newTransaction('entrada')}>
           <AiOutlinePlusCircle />
           <p>Nova <br /> entrada</p>
         </button>
-        <button  data-test="new-expense" onClick={newTransaction('saida')}>
+        <button  data-test="new-expense" onClick={() => newTransaction('saida')}>
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>
