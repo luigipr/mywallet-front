@@ -31,9 +31,10 @@ export default function TransactionsPage(route) {
   function addTransaction(e) {
     e.preventDefault();
     
-    setValue(Number(value))
+    const realvalue = Number(value).toFixed(2)
+    console.log(realvalue)
 
-    const currentTransaction = { userID, value: Number(value), description, tipo, date }
+    const currentTransaction = { userID, value: Number(realvalue), description, tipo, date }
     console.log(currentTransaction)
     const promise = transaction(currentTransaction, auth)
     console.log(promise)

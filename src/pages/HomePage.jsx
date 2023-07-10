@@ -19,6 +19,9 @@ export default function HomePage() {
 
   useEffect(() => {
 
+    if (!auth) {
+      navigate("/")
+    }
     
     const promise = userTransactions(auth)
      promise.then(res => setTransactions(res.data))
