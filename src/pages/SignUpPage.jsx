@@ -1,8 +1,9 @@
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import MyWalletLogo from "../components/MyWalletLogo"
-import api from "../../services/api";
+import {signUp} from "../services/api";
 import { useState } from "react";
+
 
 export default function SignUpPage() {
   const [username, setUsername] = useState("");
@@ -14,8 +15,8 @@ export default function SignUpPage() {
 
   function registerUser(e) {
     e.preventDefault();
-    const promise = axios.post
-    api.signUp({username, email, password, password2});
+    
+    const promise = signUp({username, email, password, password2});
 
     promise.then( resposta => {
 
@@ -33,8 +34,8 @@ export default function SignUpPage() {
         <MyWalletLogo />
         <input placeholder="Nome" data-test="name" type="text" value={username} onChange={(e) => setUsername(e.target.value)}/>
         <input placeholder="E-mail" data-test="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
-        <input placeholder="Senha" data-test="password" type="password" autocomplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)}/>
-        <input placeholder="Confirme a senha" data-test="conf-password" type="password" autocomplete="new-password" value={password2} onChange={(e) => setPassword2(e.target.value)}/>
+        <input placeholder="Senha" data-test="password" type="password" autoComplete="new-password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+        <input placeholder="Confirme a senha" data-test="conf-password" type="password" autoComplete="new-password" value={password2} onChange={(e) => setPassword2(e.target.value)}/>
         <button data-test="sign-up-submit" >Cadastrar</button>
       </form>
 

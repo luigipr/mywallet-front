@@ -1,9 +1,10 @@
 import styled from "styled-components"
 import { Link , useNavigate} from "react-router-dom"
 import MyWalletLogo from "../components/MyWalletLogo"
-import useAuth from "../../hooks/useAuth";
-import api from "../../services/api";
-import { useState, useEffect } from "react";
+import useAuth from "../hooks/useAuth";
+import {signIn} from "../services/api";
+import { useState, useEffect, useContext } from "react";
+
 
 
 
@@ -11,7 +12,7 @@ import { useState, useEffect } from "react";
 export default function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { auth, login, user, setUser } = useAuth(AuthContext);
+  const { auth, login, setUser } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,15 +26,15 @@ export default function SignInPage() {
 
     const user = {email, password};
 
-    const promise = api.signIn(user);
+    const promise = signIn(user);
 
     promise.then( response => {
-    setUser = response.data.user.username ; 
+    setUser(response.data.user);
     login(response.data.token);
     // navegar para pagina de entrada
     navigate('/home');
     });
-    promise.catch( err  => {alert(err.response.data.message)});
+    promise.catch( err  => alert(err.response.data.message));
   }
 
 

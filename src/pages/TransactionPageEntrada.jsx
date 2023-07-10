@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { useLocation, useParams} from "react-router-dom"
+import { useLocation} from "react-router-dom"
 import { useContext, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import dayjs from "dayjs"
@@ -9,18 +9,16 @@ import {transaction} from "../services/api";
 
 
 
-export default function TransactionsPage(route) {
+export default function TransactionsPage() {
   
   const navigate = useNavigate();
   const { login, token, user } = useAuth()
   const userID = user._id
-  const params = useParams();
   
 
   const [value, setValue] = useState("")
   const [description, setDescription] = useState("")
-  const {type} = params.tipo
-  console.log(type)
+  const type = props?.location.state.type
   type.charAt(0).toUpperCase() + user.slice(1)
   const date = dayjs().format("DD/MM")
 

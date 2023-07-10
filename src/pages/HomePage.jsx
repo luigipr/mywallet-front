@@ -3,56 +3,42 @@ import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import { useState, useEffect, useContext } from "react"
 import CardTransaction from "../components/Transactions"
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import AuthContext from "../contexts/AuthContext"
+import { userTransactions, logOff } from "../services/api"
+import useAuth from "../hooks/useAuth"
 
 
 
 export default function HomePage() {
   const [transactions, setTransactions] = useState([])
-  const { login, token, user ,setUser} = useContext(AuthContext)
+  const { login, auth, user ,setUser} = useAuth()
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
-  const config = {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  }
+  //const [loading, setLoading] = useState(false)
+  console.log({ login, auth, user ,setUser})
 
   useEffect(() => {
-    setLoading(true)
 
-    axios.get(`${import.meta.env.VITE_API_URL}/home`, config)
-      .then(res => {
-        setTransactions(res.data)
-        setLoading(false)
-      })
-      .catch(err => {
-        alert(err.response.data)
-        navigate("/")
-      })
-
-  }, [reload])
-
-
-  useEffect(() => {
-    axios.get(`${import.meta.env.VITE_API_URL}/transactions`, config)
-      .then(res => setTransactions(res.data))
-      .catch(err => console.log(err.response.data))
+    setUser 
+    const promise = userTransactions(auth)
+     promise.then(res => setTransactions(res.data))
+     promise.catch(err => console.log(err.response.data))
   }, [])
 
-  setTransactions(transactions.map( token = token))
 
-  let userName = user.charAt(0).toUpperCase() + user.slice(1)
+
+  const userName = user.username?.charAt(0).toUpperCase() + user.username.slice(1)
   let balance
 
   balanceCalculator()
   function balanceCalculator() {
     const balanceArray = transactions.map((item) => {
       if (item.tipo === "entrada") {
-        return Number((item.value).replace(",", "."))
+
+        
+        return Number(item.value)
       } else {
-        return Number(-item.value.replace(",", "."))
+        return Number(-item.value)
       }
     })
 
@@ -63,16 +49,27 @@ export default function HomePage() {
 
   function newTransaction(tipo) {
 
-    const type = tipo;
-    navigate(`/nova-transacao/${type}`, type)
+    navigate(`/nova-transacao/${tipo}`)
 
   }
+
+  function logout() {
+
+    const promise = logOff(user._id, auth)
+
+    promise.then(
+      navigate("/")
+    )
+    promise.catch(err => console.log(err.response.data))
+
+  }
+
 
   return (
     <HomeContainer>
       <Header>
         <h1 data-test="user-name">Olá, {userName}</h1>
-        <BiExit data-test="logout"/>
+        <BiExit data-test="logout" onClick={logout}/>
       </Header>
 
       <TransactionsContainer>

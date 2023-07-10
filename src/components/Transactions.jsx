@@ -5,13 +5,17 @@ export default function CardTransaction({transaction}) {
 
     const {_id, value, description, tipo, date } = transaction;
 
+
+
+    
+
 return (
     <ListItemContainer key={_id}>
         <div>
             <span>{date}</span>
             <strong  data-test="registry-name">{description}</strong>
         </div>
-        <Value color={tipo === 'entrada' ? 'positivo' : 'negativo'}  data-test="registry-amount">{value}</Value>
+        <Value color={tipo === 'entrada' ? 'positivo' : 'negativo'}  data-test="registry-amount">{toString(value.replace(",", "."))}</Value>
     </ListItemContainer>
 )
 
