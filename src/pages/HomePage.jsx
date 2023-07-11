@@ -19,16 +19,16 @@ export default function HomePage() {
 
   useEffect(() => {
 
-    if (!auth) {
-      navigate("/")
-    }
+    // if (!auth) {
+    //   navigate("/")
+    // }
     
     const promise = userTransactions(auth)
      promise.then(res => setTransactions(res.data))
      promise.catch(err => console.log(err.response.data))
   }, [])
 
-
+  
 
   const userName = user.username?.charAt(0).toUpperCase() + user.username.slice(1)
   let balance
@@ -39,9 +39,9 @@ export default function HomePage() {
       if (item.tipo === "entrada") {
 
         
-        return Number(item.value).replace(".", ",")
+        return Number(item.value)
       } else {
-        return Number(-item.value).replace(".", ",")
+        return Number(-item.value)
       }
     })
 
@@ -79,7 +79,7 @@ export default function HomePage() {
 
       <TransactionsContainer>
         <ul>
-          {transactions.reverse().map(trans => <CardTransaction key={trans._id} transaction={trans} />)}
+          {transactions.map(trans => <CardTransaction key={trans._id} transaction={trans} />).reverse()}
           
           
         </ul>
