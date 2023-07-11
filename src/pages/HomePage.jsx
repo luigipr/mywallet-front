@@ -19,13 +19,16 @@ export default function HomePage() {
 
   useEffect(() => {
 
-    // if (!auth) {
+    // if (!localStorage) {
     //   navigate("/")
-    // }
+    //  }
     
     const promise = userTransactions(auth)
      promise.then(res => setTransactions(res.data))
-     promise.catch(err => console.log(err.response.data))
+     promise.catch(err => {
+      console.log(err.response.data)
+      navigate("/")
+     })
   }, [])
 
   
@@ -79,7 +82,7 @@ export default function HomePage() {
 
         <article>
           <strong>Saldo</strong>
-          <Value color={balance > 0 ? 'positivo' : 'negativo'}>{balance}</Value>
+          <Value data-test="total-amount" color={balance > 0 ? 'positivo' : 'negativo'}>{balance.replace(".", ",")}</Value>
         </article>
       </TransactionsContainer>
 
