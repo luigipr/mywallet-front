@@ -39,9 +39,9 @@ export default function HomePage() {
       if (item.tipo === "entrada") {
 
         
-        return Number(item.value)
+        return Number(item.value).replace(".", ",")
       } else {
-        return Number(-item.value)
+        return Number(-item.value).replace(".", ",")
       }
     })
 
@@ -59,8 +59,10 @@ export default function HomePage() {
   function logout() {
 
     const promise = logOff(user._id, auth)
+    
 
     promise.then(
+      
       navigate("/")
     )
     promise.catch(err => console.log(err.response.data))
@@ -77,7 +79,7 @@ export default function HomePage() {
 
       <TransactionsContainer>
         <ul>
-          {transactions.map(trans => <CardTransaction key={trans._id} transaction={trans} />)}
+          {transactions.reverse().map(trans => <CardTransaction key={trans._id} transaction={trans} />)}
           
           
         </ul>

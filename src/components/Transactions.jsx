@@ -15,7 +15,7 @@ return (
             <span>{date}</span>
             <strong  data-test="registry-name">{description}</strong>
         </div>
-        <Value color={tipo === 'entrada' ? 'positivo' : 'negativo'}  data-test="registry-amount">{value}</Value>
+        <Value color={tipo === 'entrada' ? 'positivo' : 'negativo'}  data-test="registry-amount">{Number(value.toFixed(2))}</Value>
     </ListItemContainer>
 )
 
