@@ -46,7 +46,6 @@ export default function HomePage() {
     })
 
     balance = (balanceArray.reduce((acc, current) => acc + current, 0)).toFixed(2).toString()
-    balance.replace(".", ",")
     return balance
   }
 
@@ -57,17 +56,11 @@ export default function HomePage() {
   }
 
   function logout() {
+        localStorage.clear();
+        setUser({});
+        navigate("/");
+    }
 
-    const promise = logOff(user._id, auth)
-    
-
-    promise.then(
-      
-      navigate("/")
-    )
-    promise.catch(err => console.log(err.response.data))
-
-  }
 
 
   return (
